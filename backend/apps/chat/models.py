@@ -1,3 +1,6 @@
+# NOTE: The app must never do migrations.
+# The reset db script will always be run by the user whenever a new table is added.
+# We will never care about the existing data in the db.
 from django.db import models
 
 class AILog(models.Model):

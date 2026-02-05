@@ -62,6 +62,14 @@ export function Navbar() {
                 Profile
               </Link>
             )}
+            {isAuthenticated && (
+              <Link
+                to="/ai-logs"
+                className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+              >
+                AI Logs
+              </Link>
+            )}
           </nav>
         </div>
 
