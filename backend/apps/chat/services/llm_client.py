@@ -1,5 +1,6 @@
 from django.conf import settings
-from openai import OpenAI
+from langchain_openai import ChatOpenAI
+from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
 import logging
 
 logger = logging.getLogger(__name__)
@@ -7,15 +8,30 @@ logger = logging.getLogger(__name__)
 class LLMClient:
     def __init__(self):
         self.api_key = getattr(settings, 'OPENAI_API_KEY', None)
-        self.client = OpenAI(api_key=self.api_key)
+        self.chat = ChatOpenAI(
+            api_key=self.api_key,
+            model="gpt-4o-mini"
+        )
 
     def get_response(self, messages, model="gpt-4o-mini"):
         try:
-            response = self.client.chat.completions.create(
-                model=model,
-                messages=messages
-            )
-            return response.choices[0].message.content
+            # Update model if different from default
+            if model != self.chat.model_name:
+                self.chat.model_name = model
+
+            langchain_messages = []
+            for msg in messages:
+                role = msg.get("role")
+                content = msg.get("content")
+                if role == "system":
+                    langchain_messages.append(SystemMessage(content=content))
+                elif role == "user":
+                    langchain_messages.append(HumanMessage(content=content))
+                elif role == "assistant":
+                    langchain_messages.append(AIMessage(content=content))
+            
+            response = self.chat.invoke(langchain_messages)
+            return response.content
         except Exception as e:
-            logger.error(f"Error calling OpenAI: {e}")
+            logger.error(f"Error calling OpenAI via LangChain: {e}")
             return "Analysis complete: I am currently unable to provide therapy. Please check my connection."

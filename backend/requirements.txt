@@ -45,5 +45,7 @@ typing_extensions==4.15.0
 uritemplate==4.2.0
 virtualenv==20.36.1
 openai>=1.59.0
+langchain>=0.1.0
+langchain-openai>=0.0.5
 channels
 daphne
