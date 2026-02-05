@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { AILog } from '../types';
 import { getAILogs } from '../api';
 import { ChevronDown, ChevronRight } from 'lucide-react';
+import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 
 function LogTableRow({ log }: { log: AILog }) {
     const [isOutputExpanded, setIsOutputExpanded] = useState(false);
@@ -23,8 +24,12 @@ function LogTableRow({ log }: { log: AILog }) {
                 </td>
                 <td className="px-4 py-3 max-w-[400px] align-top">
                     <div className="flex items-start gap-2">
-                        <div className={`text-xs text-muted-foreground ${isOutputExpanded ? 'whitespace-pre-wrap' : 'line-clamp-2'}`}>
-                            {log.output_text}
+                        <div className={`text-xs text-muted-foreground ${isOutputExpanded ? '' : 'line-clamp-2'}`}>
+                            {isOutputExpanded ? (
+                                <MarkdownRenderer content={log.output_text} />
+                            ) : (
+                                log.output_text
+                            )}
                         </div>
                         {log.output_text.length > 100 && (
                             <button

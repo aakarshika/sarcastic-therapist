@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Message } from "../types";
+import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 
 interface ChatBubbleProps {
     message: Message;
@@ -19,7 +20,7 @@ export function ChatBubble({ message }: ChatBubbleProps) {
                     ? "bg-gradient-to-br from-primary to-primary/90 text-primary-foreground rounded-br-sm shadow-primary/20"
                     : "bg-background/60 border border-white/10 backdrop-blur-md text-foreground rounded-bl-sm shadow-lg"
             )}>
-                {message.content}
+                <MarkdownRenderer content={message.content} />
             </div>
         </div>
     );
