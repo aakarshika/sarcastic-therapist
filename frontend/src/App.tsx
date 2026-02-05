@@ -1,0 +1,54 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { scan } from 'react-scan';
+
+import { Toaster } from '@/components/ui/sonner';
+
+import { Navbar } from './components/Navbar';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import { AuthProvider } from './features/auth/hooks';
+import ProfilePage from './features/auth/pages/ProfilePage';
+import SignInPage from './features/auth/pages/SignInPage';
+import SignUpPage from './features/auth/pages/SignUpPage';
+
+const queryClient = new QueryClient();
+
+if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
+  scan({
+    enabled: true,
+  });
+}
+
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <BrowserRouter>
+          <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
+            <Navbar />
+            <Toaster />
+            <main>
+              <Routes>
+                <Route path="/signup" element={<SignUpPage />} />
+                <Route path="/signin" element={<SignInPage />} />
+
+                {/* Protected Routes */}
+                <Route element={<ProtectedRoute />}>
+                  <Route path="/profile" element={<ProfilePage />} />
+                </Route>
+
+                <Route path="/" element={<Navigate to="/signup" replace />} />
+              </Routes>
+            </main>
+          </div>
+        </BrowserRouter>
+        {process.env.NODE_ENV === 'development' && (
+          <ReactQueryDevtools initialIsOpen={false} />
+        )}
+      </AuthProvider>
+    </QueryClientProvider>
+  );
+}
+
+export default App;
