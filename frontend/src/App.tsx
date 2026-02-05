@@ -7,6 +7,7 @@ import { Toaster } from '@/components/ui/sonner';
 
 import { Navbar } from './components/Navbar';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import { PublicOnlyRoute } from './components/PublicOnlyRoute';
 import { AuthProvider } from './features/auth/hooks';
 import ProfilePage from './features/auth/pages/ProfilePage';
 import SignInPage from './features/auth/pages/SignInPage';
@@ -33,16 +34,18 @@ function App() {
             <Toaster />
             <main>
               <Routes>
-                <Route path="/signup" element={<SignUpPage />} />
-                <Route path="/signin" element={<SignInPage />} />
+                {/* Public Only Routes (Redirect to /profile if logged in) */}
+                <Route element={<PublicOnlyRoute />}>
+                  <Route path="/signup" element={<SignUpPage />} />
+                  <Route path="/signin" element={<SignInPage />} />
+                  <Route path="/" element={<Navigate to="/signin" replace />} />
+                </Route>
 
                 {/* Protected Routes */}
                 <Route element={<ProtectedRoute />}>
                   <Route path="/profile" element={<ProfilePage />} />
                   <Route path="/chat" element={<ChatPage />} />
                 </Route>
-
-                <Route path="/" element={<Navigate to="/signup" replace />} />
               </Routes>
             </main>
           </div>

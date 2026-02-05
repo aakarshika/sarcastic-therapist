@@ -65,7 +65,7 @@ export default function SignUpPage() {
       });
 
       if (res.success) {
-        login(res.data.access, res.data.refresh, res.data.user);
+        login(res.data.user);
         toast.success('Account created successfully!');
         navigate('/profile');
       }

@@ -53,7 +53,7 @@ export default function SignInPage() {
       });
 
       if (res.success) {
-        login(res.data.access, res.data.refresh, res.data.user);
+        login(res.data.user);
         toast.success('Welcome back!');
         navigate('/profile');
       }

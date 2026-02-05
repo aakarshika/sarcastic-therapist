@@ -5,18 +5,10 @@ const client = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
 });
 
-client.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error),
-);
+// Request interceptor not needed for cookies as they are sent automatically
 
 client.interceptors.response.use(
   (response) => response,
@@ -24,29 +16,17 @@ client.interceptors.response.use(
     const originalRequest = error.config;
 
     // Prevent infinite loops
-    if (error.response.status === 401 && !originalRequest._retry) {
+    if (error.response?.status === 401 && !originalRequest._retry && !originalRequest.url?.includes('signin')) {
       originalRequest._retry = true;
 
       try {
-        const refreshToken = localStorage.getItem('refresh_token');
-        if (refreshToken) {
-          const response = await axios.post('/api/v1/auth/refresh/', {
-            refresh: refreshToken,
-          });
-
-          if (response.status === 200) {
-            const { access } = response.data;
-            localStorage.setItem('token', access);
-            client.defaults.headers.common['Authorization'] = `Bearer ${access}`;
-            originalRequest.headers['Authorization'] = `Bearer ${access}`;
-            return client(originalRequest);
-          }
-        }
+        // Attempt to refresh token (cookies are sent automatically)
+        await client.post('/auth/token/refresh/');
+        // Retry original request
+        return client(originalRequest);
       } catch {
-        // Refresh failed - logout
-        localStorage.removeItem('token');
-        localStorage.removeItem('refresh_token');
-        window.location.href = '/signin';
+        // Refresh failed - do nothing, let the error propagate
+        // AuthContext will handle clearing the user state
       }
     }
     return Promise.reject(error);

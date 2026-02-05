@@ -12,8 +12,6 @@ export interface User {
 
 export interface AuthResponse {
   user: User;
-  access: string;
-  refresh: string;
 }
 
 export const authApi = {
@@ -35,6 +33,10 @@ export const authApi = {
   }): Promise<ApiResponse<AuthResponse>> => {
     const res = await client.post('/auth/signin/', data);
     return res.data;
+  },
+
+  logout: async (): Promise<void> => {
+    await client.post('/auth/signout/');
   },
 
   getMe: async (): Promise<ApiResponse<User>> => {

@@ -5,7 +5,7 @@ import { authApi, User } from './api';
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  login: (access: string, refresh: string, userData: User) => void;
+  login: (userData: User) => void;
   logout: () => void;
   isAuthenticated: boolean;
 }
@@ -16,25 +16,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const clearAuth = (shouldRemoveToken = true) => {
-    if (shouldRemoveToken) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('refresh_token');
-    }
+  const clearAuth = () => {
+    // No explicit token removal needed for cookies on client side logic
+    // But we clear state.
     setUser(null);
   };
 
   useEffect(() => {
     const initAuth = async () => {
-      const token = localStorage.getItem('token');
-      if (token) {
-        try {
-          const res = await authApi.getMe();
-          setUser(res.data);
-        } catch (error) {
-          console.error('Auth check failed', error);
-          clearAuth();
-        }
+      // Always try to fetch me to see if session is valid
+      try {
+        const res = await authApi.getMe();
+        setUser(res.data);
+      } catch (error) {
+        // Not authenticated
+        clearAuth();
       }
       setLoading(false);
     };
@@ -42,14 +38,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     initAuth();
   }, []);
 
-  const login = (access: string, refresh: string, userData: User) => {
-    localStorage.setItem('token', access);
-    localStorage.setItem('refresh_token', refresh);
+  const login = (userData: User) => {
     setUser(userData);
   };
 
   const logout = () => {
-    clearAuth();
+    authApi.logout().finally(() => {
+      clearAuth();
+    });
   };
 
   const value = {

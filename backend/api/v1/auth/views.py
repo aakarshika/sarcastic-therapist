@@ -13,6 +13,8 @@ from core.serializers import SuccessResponseSerializer
 from .serializers import LoginSerializer, SignUpSerializer, UserSerializer
 
 
+from django.conf import settings
+
 class SignUpView(APIView):
     """View to handle user registration and initial profile setup."""
 
@@ -41,14 +43,32 @@ class SignUpView(APIView):
 
         tokens = get_tokens_for_user(user)
 
-        return success_response(
+        response = success_response(
             message="User created successfully",
             data={
                 "user": UserSerializer(user).data,
-                "access": tokens["access"],
-                "refresh": tokens["refresh"],
             },
         )
+        
+        cookie_max_age = 3600 * 24 * 7
+        response.set_cookie(
+            settings.SIMPLE_JWT["AUTH_COOKIE_REFRESH"],
+            tokens["refresh"],
+            max_age=cookie_max_age,
+            httponly=True,
+            samesite=settings.SIMPLE_JWT["AUTH_COOKIE_SAMESITE"],
+            secure=settings.SIMPLE_JWT["AUTH_COOKIE_SECURE"],
+        )
+        response.set_cookie(
+            settings.SIMPLE_JWT["AUTH_COOKIE"],
+            tokens["access"],
+            max_age=settings.SIMPLE_JWT["ACCESS_TOKEN_LIFETIME"].total_seconds(),
+            httponly=True,
+            samesite=settings.SIMPLE_JWT["AUTH_COOKIE_SAMESITE"],
+            secure=settings.SIMPLE_JWT["AUTH_COOKIE_SECURE"],
+        )
+        
+        return response
 
 
 class MeView(APIView):
@@ -90,11 +110,29 @@ class LoginView(APIView):
         # Use service layer
         tokens = get_tokens_for_user(user)
 
-        return success_response(
+        response = success_response(
             message="Login successful",
             data={
                 "user": UserSerializer(user).data,
-                "access": tokens["access"],
-                "refresh": tokens["refresh"],
             },
         )
+        
+        cookie_max_age = 3600 * 24 * 7
+        response.set_cookie(
+            settings.SIMPLE_JWT["AUTH_COOKIE_REFRESH"],
+            tokens["refresh"],
+            max_age=cookie_max_age,
+            httponly=True,
+            samesite=settings.SIMPLE_JWT["AUTH_COOKIE_SAMESITE"],
+            secure=settings.SIMPLE_JWT["AUTH_COOKIE_SECURE"],
+        )
+        response.set_cookie(
+            settings.SIMPLE_JWT["AUTH_COOKIE"],
+            tokens["access"],
+            max_age=settings.SIMPLE_JWT["ACCESS_TOKEN_LIFETIME"].total_seconds(),
+            httponly=True,
+            samesite=settings.SIMPLE_JWT["AUTH_COOKIE_SAMESITE"],
+            secure=settings.SIMPLE_JWT["AUTH_COOKIE_SECURE"],
+        )
+        
+        return response
