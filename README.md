@@ -1,4 +1,6 @@
-# StarterApp (Django + React)
+# Sarcastic Therapist (Django + React)
+
+Sarcastic Therapist is an AI-powered chatbot that delivers mental health advice with a refreshing dose of wit and personality. Built on a robust Django and React stack, it leverages LangChain to provide a unique, engaging, and humorous therapeutic experience.
 
 A strict, scalable monolithic application featuring a **Django REST Framework** backend and a **React + TypeScript + Vite** frontend.
 
@@ -34,6 +36,7 @@ This project follows a "Starter Pack" architecture with enforced rules for code 
 | **Frontend** | React | `18.3.1` | `package.json` |
 | **Build Tool** | Vite | `7.3.1` | `package.json` |
 | **Quality** | Pre-commit | `latest` | `backend/requirements.txt` |
+| **AI/ML** | LangChain | `0.1.x` | `backend/requirements.txt` |
 | **Scoreboard** | Pylint | `10.00/10` | `.pylintrc` |
 
 ---
@@ -73,7 +76,7 @@ npm install
 ### 3. Execution
 ```bash
 # Terminal 1: Backend
-cd backend && python manage.py runserver
+cd backend && python manage.py runserver 8282
 
 # Terminal 2: Frontend
 cd frontend && npm run dev
@@ -98,7 +101,7 @@ The backend provides a strictly typed JSON API using Django REST Framework.
 
 ### Configuration (`backend/config/settings/`)
 - `base.py`: Shared settings.
-- `development.py`: Active by default (`DEBUG=True`), CORS allow localhost:5173.
+- `development.py`: Active by default (`DEBUG=True`), CORS allow localhost:5252.
 - `production.py`: For deployment.
 
 **Environment Variables**:
@@ -132,8 +135,8 @@ The backend provides a strictly typed JSON API using Django REST Framework.
 
 3. **Start Server**:
    ```bash
-   python manage.py runserver
-   # Runs on http://localhost:8000
+   python manage.py runserver 8282
+   # Runs on http://localhost:8282
    ```
 
 ### Code Quality (Push Hooks)
@@ -200,9 +203,9 @@ The frontend is a modern SPA built with performance and developer experience in 
 2. **Start Dev Server**:
    ```bash
    npm run dev
-   # Runs on http://localhost:5173
+   # Runs on http://localhost:5252
    ```
-   *Note: Vite is configured to Proxy `/api` requests to `http://localhost:8000` automatically.*
+   *Note: Vite is configured to Proxy `/api` requests to `http://localhost:8282` automatically.*
 
 3. **Production Build**:
    ```bash
