@@ -65,11 +65,15 @@ export default function SignInPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8">
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">Sign In</CardTitle>
-          <CardDescription className="text-center">Welcome back!</CardDescription>
+    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
+      <Card className="w-full max-w-md border-white/10 bg-background/40 backdrop-blur-xl shadow-2xl animate-in fade-in zoom-in-95 duration-500">
+        <CardHeader className="space-y-1 text-center">
+          <CardTitle className="text-3xl font-bold bg-gradient-to-br from-foreground to-muted-foreground bg-clip-text text-transparent">
+            Welcome Back
+          </CardTitle>
+          <CardDescription className="text-base">
+            Enter your credentials to access your account
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -81,7 +85,7 @@ export default function SignInPage() {
                   <FormItem>
                     <FormLabel>Username</FormLabel>
                     <FormControl>
-                      <Input placeholder="johndoe" {...field} />
+                      <Input placeholder="johndoe" {...field} className="bg-background/50 border-white/10" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -94,7 +98,7 @@ export default function SignInPage() {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input type="password" {...field} />
+                      <Input type="password" {...field} className="bg-background/50 border-white/10" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -102,7 +106,7 @@ export default function SignInPage() {
               />
               <Button
                 type="submit"
-                className="w-full"
+                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/25 transition-all hover:scale-[1.02]"
                 disabled={form.formState.isSubmitting}
               >
                 {form.formState.isSubmitting ? 'Signing in...' : 'Sign in'}
@@ -115,7 +119,7 @@ export default function SignInPage() {
             Don't have an account?{' '}
             <Link
               to="/signup"
-              className="underline underline-offset-4 hover:text-primary"
+              className="font-medium text-primary hover:text-primary/90 underline-offset-4 hover:underline"
             >
               Sign Up
             </Link>
