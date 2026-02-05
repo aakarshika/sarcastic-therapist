@@ -29,10 +29,18 @@ export function Navbar() {
     <nav className="border-b bg-background">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 justify-between items-center">
-          <div className="flex">
+          <div className="flex items-center gap-6">
             <Link to="/" className="flex flex-shrink-0 items-center">
               <span className="text-xl font-bold text-foreground">MyApp</span>
             </Link>
+            {isAuthenticated && (
+              <Link
+                to="/chat"
+                className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+              >
+                Chat
+              </Link>
+            )}
           </div>
           <div className="flex items-center gap-4">
             <Button

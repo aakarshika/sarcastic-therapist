@@ -6,12 +6,15 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "django-insecure-change-me-in-prod")
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 DEBUG = False
 ALLOWED_HOSTS = []
 
 # Security
 
 INSTALLED_APPS = [
+    "daphne",
+    "channels",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -27,6 +30,7 @@ INSTALLED_APPS = [
     "core",
     "api",
     "apps.profiles",
+    "apps.chat",
     "silk",
 ]
 
@@ -61,6 +65,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "config.wsgi.application"
+ASGI_APPLICATION = "config.asgi.application"
 
 DATABASES = {
     "default": {

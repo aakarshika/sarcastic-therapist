@@ -11,6 +11,7 @@ import { AuthProvider } from './features/auth/hooks';
 import ProfilePage from './features/auth/pages/ProfilePage';
 import SignInPage from './features/auth/pages/SignInPage';
 import SignUpPage from './features/auth/pages/SignUpPage';
+import ChatPage from './features/chat/pages/ChatPage';
 
 const queryClient = new QueryClient();
 
@@ -36,6 +37,7 @@ function App() {
                 {/* Protected Routes */}
                 <Route element={<ProtectedRoute />}>
                   <Route path="/profile" element={<ProfilePage />} />
+                  <Route path="/chat" element={<ChatPage />} />
                 </Route>
 
                 <Route path="/" element={<Navigate to="/signup" replace />} />
