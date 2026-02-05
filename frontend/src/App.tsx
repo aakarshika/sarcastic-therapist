@@ -13,6 +13,7 @@ import ProfilePage from './features/auth/pages/ProfilePage';
 import SignInPage from './features/auth/pages/SignInPage';
 import SignUpPage from './features/auth/pages/SignUpPage';
 import ChatPage from './features/chat/pages/ChatPage';
+import AILogsPage from './features/chat/pages/AILogsPage';
 
 const queryClient = new QueryClient();
 
@@ -45,6 +46,7 @@ function App() {
                 <Route element={<ProtectedRoute />}>
                   <Route path="/profile" element={<ProfilePage />} />
                   <Route path="/chat" element={<ChatPage />} />
+                  <Route path="/ai-logs" element={<AILogsPage />} />
                 </Route>
               </Routes>
             </main>

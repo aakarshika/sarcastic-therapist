@@ -1,7 +1,9 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, viewsets
 from apps.chat.services.chat_box import ChatBox
+from apps.chat.models import AILog
+from apps.chat.serializers import AILogSerializer
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
 
 class ChatView(APIView):
@@ -41,3 +43,11 @@ class ChatView(APIView):
         ai_response = self.chat_box.process_message(message, user_settings)
         
         return Response({"response": ai_response}, status=status.HTTP_200_OK)
+
+class AILogViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    API endpoint that allows AI logs to be viewed.
+    """
+    queryset = AILog.objects.all()
+    serializer_class = AILogSerializer
+

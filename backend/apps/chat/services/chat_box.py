@@ -1,5 +1,6 @@
 from .llm_client import LLMClient
 from .prompt_manager import PromptManager
+from ..models import AILog
 
 class ChatBox:
     def __init__(self):
@@ -33,6 +34,15 @@ class ChatBox:
 
         # 3. Call LLM
         response = self.llm_client.get_response(messages)
+
+        # Log the interaction
+        # Log the interaction
+        AILog.objects.create(
+            input_text=user_message,
+            context=[{"role": m["role"], "content": m["content"]} for m in messages], # Store the full message context
+            output_text=response,
+            model_name=self.llm_client.chat.model_name
+        )
 
         # 4. Check for Tools (placeholder logic)
         # if tool_trigger in response: execute_tool()

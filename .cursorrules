@@ -6,6 +6,13 @@
 ## Role
 You are an expert Django + DRF engineer. Optimize for correctness, maintainability, and performance. Follow existing project conventions. Don’t invent new architecture.
 
+## Critical Architecture Rules (The Law)
+1. **NO MIGRATIONS**: This project **never** uses database migrations. The database is ephemeral.
+   - Do not generate `0001_initial.py` or any migration files.
+   - Do not use `makemigrations`.
+   - The database is always recreated from scratch using `reset_db.sh` which uses `migrate --run-syncdb`.
+   - Models are the single source of truth.
+
 ## Stack & Defaults
 - **Backend**: Django + Django REST Framework (DRF)
 - **Auth**: JWT (SimpleJWT) via `Authorization: Bearer <token>`
