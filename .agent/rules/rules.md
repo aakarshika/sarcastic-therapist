@@ -38,6 +38,9 @@ All endpoints must return this unified envelope:
 - **Components**: `src/components/` is only for truly shared/generic UI.
 - **Styling**: TailwindCSS only. Use `cn()` for conditional classes.
 
+### DB
+- **Registry**: Every new table should be registered in `admin.py`
+
 ## Assistant Output Rules
 - **Minimal Diffs**: Do not refactor unrelated code.
 - **File Paths**: Always use absolute paths.
